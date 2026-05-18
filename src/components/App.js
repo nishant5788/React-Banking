@@ -69,7 +69,7 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{balance, activeLoan, loan, isActive}, dispatch] = useReducer(reducer, initialState);
+  const [{balance, loan, isActive}, dispatch] = useReducer(reducer, initialState);
 
   return (
     <main className="bank-app">
