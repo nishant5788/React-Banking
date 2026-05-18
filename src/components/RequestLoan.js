@@ -1,8 +1,8 @@
-function RequestLoan({ dispatch, isActive, activeLoan}) {
+function RequestLoan({ dispatch, isActive}) {
   return (
    <button
-    disabled={!isActive || activeLoan}
-      onClick={() => dispatch({ type: "requestLoan" })}
+    disabled={!isActive}
+      onClick={() => dispatch({ type: "requestLoan", payload: 5000 })}
     >
             Request Loan $5000
           </button>

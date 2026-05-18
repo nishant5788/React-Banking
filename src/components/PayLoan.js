@@ -1,7 +1,7 @@
-function PayLoan({ dispatch, isActive, balance}) {
+function PayLoan({ dispatch, isActive}) {
   return (
    <button
-    disabled={!isActive && balance > 5000}
+   disabled={!isActive}
       onClick={() => dispatch({ type: "payLoan" })}
     >
             Pay Loan

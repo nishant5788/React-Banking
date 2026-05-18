@@ -13,51 +13,50 @@ const initialState = {
   balance: 0,
   loan: 0,
   isActive: false,
-  loanAmount: 0,
-  activeLoan: false
 };
 
-const LOAN_VALUE = 5000;
-
 function reducer(state, action) {
+
+  if(!state.isActive && action.type !== 'openAccount') return state;
 
   switch(action.type) {
 
     case "openAccount": 
     return {
         ...state, 
-        isActive: true
+        isActive: true,
+        balance: 500
       };
 
       case "deposit": 
       return {
         ...state, 
-        balance: state.balance + 150
+        balance: state.balance + action.payload
       };
 
       case "withdraw": 
       return {
         ...state, 
-        balance: state.balance - 50
+        balance: state.balance - action.payload
       };
 
       case "requestLoan": 
+      if(state.loan > 0) return state;
       return {
         ...state, 
-        balance: state.balance + LOAN_VALUE,
-        activeLoan: true,
-        loanAmount: LOAN_VALUE
+        balance: state.balance + action.payload,
+        loan: action.payload
       };
 
       case "payLoan": 
       return {
         ...state, 
-        balance: state.balance - LOAN_VALUE,
-        activeLoan: false,
-        loanAmount: 0
+        balance: state.balance - state.loan,
+        loan: 0
       };
 
       case "closeAccount": 
+      if(state.loan > 0 || state.balance !== 0) return state;
       return {
         ...initialState
       };
@@ -70,7 +69,7 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{balance, activeLoan, loanAmount, isActive}, dispatch] = useReducer(reducer, initialState);
+  const [{balance, activeLoan, loan, isActive}, dispatch] = useReducer(reducer, initialState);
 
   return (
     <main className="bank-app">
@@ -80,7 +79,7 @@ export default function App() {
         <section className="account-overview">
           <Balance balance={balance} />
 
-          <Loan loanAmount={loanAmount} />
+          <Loan loan={loan} />
         </section>
 
         <section className="actions">
@@ -90,9 +89,9 @@ export default function App() {
 
           <Withdraw dispatch={dispatch} isActive={isActive} />
 
-          <RequestLoan activeLoan={activeLoan} dispatch={dispatch} isActive={isActive} />
+          <RequestLoan dispatch={dispatch} isActive={isActive} />
 
-          <PayLoan balance={balance} dispatch={dispatch} isActive={isActive} />
+          <PayLoan dispatch={dispatch} isActive={isActive} />
 
           <CloseAccount dispatch={dispatch} isActive={isActive} />
         </section>
